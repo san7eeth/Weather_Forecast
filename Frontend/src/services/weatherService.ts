@@ -1,6 +1,9 @@
 import { WeatherData } from '../types/weather';
 
-const API_BASE = (import.meta as any).env?.VITE_API_BASE || 'http://localhost:5000';
+const VITE_ENV: any = (import.meta as any).env || {};
+const RENDER_HOST = VITE_ENV?.VITE_BACKEND_HOST as string | undefined;
+const API_BASE = (VITE_ENV?.VITE_API_BASE as string | undefined)
+  || (RENDER_HOST ? `https://${RENDER_HOST}` : 'http://localhost:5000');
 
 const mapConditionToCode = (condition: string): number => {
   const c = (condition || '').toLowerCase();

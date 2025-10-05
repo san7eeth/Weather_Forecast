@@ -15,11 +15,11 @@ services:
     buildCommand: npm ci && npm run build
     staticPublishPath: dist
     envVars:
-      - key: VITE_API_BASE
+      - key: VITE_BACKEND_HOST
         fromService:
           type: web
           name: skylens-backend
-          property: url
+          property: host
     routes:
       - type: rewrite
         source: "/*"
