@@ -2,8 +2,25 @@ import { WeatherData } from '../types/weather';
 
 const VITE_ENV: any = (import.meta as any).env || {};
 const RENDER_HOST = VITE_ENV?.VITE_BACKEND_HOST as string | undefined;
-const API_BASE = (VITE_ENV?.VITE_API_BASE as string | undefined)
-  || (RENDER_HOST ? `https://${RENDER_HOST}` : 'http://localhost:5000');
+
+// Prefer explicit env, then detect GitHub Pages and fall back to Render, then host-based defaults
+const resolveApiBase = (): string => {
+  const fromEnv = (VITE_ENV?.VITE_API_BASE as string | undefined)?.trim();
+  if (fromEnv) return fromEnv.replace(/\/$/, '');
+
+  const isGhPages = typeof window !== 'undefined' && /\.github\.io$/i.test(window.location.host);
+  if (isGhPages) return 'https://weather-forecast-3wzc.onrender.com';
+
+  if (RENDER_HOST) return `https://${RENDER_HOST}`;
+
+  const host = typeof window !== 'undefined' ? window.location.hostname : '';
+  if (host === 'localhost' || host === '127.0.0.1') return 'http://localhost:5000';
+
+  // Safe default for unknown hosts
+  return 'https://weather-forecast-3wzc.onrender.com';
+};
+
+const API_BASE = resolveApiBase();
 
 const mapConditionToCode = (condition: string): number => {
   const c = (condition || '').toLowerCase();
