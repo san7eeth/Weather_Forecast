@@ -8,8 +8,9 @@ services:
     healthCheckPath: /api/health
     autoDeploy: true
 
-staticSites:
-  - name: skylens-frontend
+  - type: web
+    name: skylens-frontend
+    env: static
     rootDir: Frontend
     buildCommand: npm ci && npm run build
     publishPath: dist
