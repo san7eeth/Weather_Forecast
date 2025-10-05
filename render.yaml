@@ -8,8 +8,8 @@ services:
     healthCheckPath: /api/health
     autoDeploy: true
 
-  - type: static_site
-    name: skylens-frontend
+staticSites:
+  - name: skylens-frontend
     rootDir: Frontend
     buildCommand: npm ci && npm run build
     publishPath: dist
@@ -23,3 +23,4 @@ services:
       - type: rewrite
         source: "/*"
         destination: "/index.html"
+
